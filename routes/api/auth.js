@@ -7,7 +7,9 @@ router.get('/', auth.index)
 
 router.post('/register', auth.register)
 router.post('/login', auth.login)
-router.post('/test', auth.testAuthenticate)
-router.post('/whoami', restrict, auth.whoami)
+router.post('/login-token', restrict, auth.loginToken)
+
+
+// router.post('/test', auth.testAuthenticate)
 
 module.exports = router

@@ -10,6 +10,14 @@ const init_user = {
   updatedAt: new Date()
 }
 
+const init_user1 = {
+  username: 'grotius',
+  password: bcrypt.hashSync('admin', 10),
+  asAdmin: false,
+  createdAt: new Date(),
+  updatedAt: new Date()
+}
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     /**
@@ -21,7 +29,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   await queryInterface.bulkInsert('Users', [init_user], {})
+   await queryInterface.bulkInsert('Users', [init_user, init_user1], {})
   },
 
   down: async (queryInterface, Sequelize) => {

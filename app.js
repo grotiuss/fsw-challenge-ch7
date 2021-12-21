@@ -3,13 +3,20 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var passport = require('passport');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
+var gameRouter = require('./routes/game')
+
 var authRouter = require('./routes/api/auth')
 
 var app = express();
+
+
+const passport = require('./lib/passport')
+app.use(passport.initialize())
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,8 +28,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+//Game
+app.use('/game', gameRouter);
 
 //API
 app.use('/api/v1/auth', authRouter);

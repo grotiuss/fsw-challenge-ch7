@@ -14,10 +14,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      User.hasMany(models.Game_room, { foreignKey: 'player_1_id' })
+      User.hasMany(models.Game_room, { foreignKey: 'player_2_id' })
     }
 
-    static #encrypt = (password) => bcrypt.hashSync(password, 10)
+    static #encrypt  (password) {
+      return bcrypt.hashSync(password, 10)
+    }
 
     static register = async({ username, password }) => {
       const encryptedPassword = this.#encrypt(password)
@@ -28,11 +31,10 @@ module.exports = (sequelize, DataTypes) => {
 
     generateToken = () => {
       const payload = {
+        id: this.id,
         username: this.username,
-        password: this.password,
-        asAdmin: this.asAdmin
       }
-      const secret = 'hastalafista'
+      const secret = 'aslkdmwjk13j4k32nkmlfaoijas'
       const token = jwt.sign(payload, secret)
       return token
     }
@@ -40,11 +42,9 @@ module.exports = (sequelize, DataTypes) => {
     static authenticate = async({ username, password }) => {
       try {
         const user = await this.findOne({ where: { username } })
-        console.log(user)
         if(!user) return Promise.reject('User not found!')
 
         const isPasswordValid = user.checkPassword(password)
-        console.log(isPasswordValid)
         if(!isPasswordValid) return Promise.reject('Wrong password!')
 
         return Promise.resolve(user)
